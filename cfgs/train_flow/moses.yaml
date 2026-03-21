@@ -1,0 +1,72 @@
+# debug
+debug: no # deprecated
+use_wandb: no
+seed: 123
+
+# save
+tag: moses
+
+# data
+data_dirn: data/processed/moses_brics_all.lmdb
+frag_data_dirn: data/processed/moses_brics_all_fragment.lmdb
+frag_smi_to_idx_fn: data/processed/moses_brics_all_fragment_to_idx.pkl
+ae_model_dirn: save/ae_model/moses
+
+latent_transform: min_max
+node_distort_schedule: polydec
+edge_distort_schedule: polydec
+latent_z_distort_schedule: identity
+
+# prior distribution
+node_prior: mask
+edge_prior: uniform
+
+# model embedders and linears
+in_frag_rrwp_walk_length: 0
+frag_fully_connected_graph: no
+rrwp_walk_length: 6
+use_frag_valency: yes
+embd_h_dim: 256
+embd_e_dim: 128
+frag_g_dim: 197
+embd_frag_bag_type: mask
+hid_dim: 256
+fc_dropout: 0.1
+fc_layer_norm: yes
+fc_activation: silu
+fc_init_method: xavier
+
+# model backbone
+backbone_type: gt_digress
+backbone_n_head: 8
+backbone_n_frag_to_vect_layer: 5
+backbone_n_coarse_graph_propagate_layer: 5
+backbone_dropout: 0.1
+backbone_layer_norm: yes
+backbone_activation: silu
+backbone_init_method: xavier
+
+# loss multiplier
+latent_loss: 1.0
+fragment_type_loss: 5.0
+fragment_edge_loss: 1.0
+
+# optimizer
+lr_warmup: yes
+lr_warmup_iter: 10000
+optimizer_type: adamw
+optimizer_betas: [0.9, 0.999]
+lr: 5.0e-4
+weight_decay: 0.0
+use_ema: yes
+
+# training params
+log_every_n_iter: 1000
+eval_every_n_log: 10
+bs: 256
+n_base_frag: 384
+frag_select_temp: 1.0
+grad_clip: 8.0
+
+# system
+n_worker: 8

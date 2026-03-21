@@ -1,0 +1,36 @@
+# debug
+debug: no # deprecated
+seed: 123
+
+# save
+tag: moses_logp
+force_save_dirn: save/generate/moses_logp
+
+# data
+data_dirn: data/processed/moses_brics_all.lmdb
+frag_data_dirn: data/processed/moses_brics_all_fragment.lmdb
+frag_smi_to_idx_fn: data/processed/moses_brics_all_fragment_to_idx.pkl
+
+# model dirn
+fm_model_dirn: save/flow_model/moses
+model_cut: best
+
+# sample t
+n_sample: 1000
+fragment_bag: train # (train, valid, test)
+frag_select_temperature: 1.0
+n_euler_step: 500
+t_min: 0.0
+t_max: 1.0
+node_noise: 20.0
+edge_noise: 20.0
+
+# system
+bs: 256
+n_worker: 8
+
+# discriminator
+disc_model_dirn: save/disc_model/moses_logp # include it when conditional
+guide_val: 1.0
+bag_guide_strength: 1.0
+graph_guide_strength: 20.0

@@ -1,0 +1,23 @@
+[project]
+name = "npgenbenchmark"
+channels = [
+  "conda-forge",
+  "https://repo.anaconda.com/pkgs/main",
+  "https://repo.anaconda.com/pkgs/r",
+]
+platforms = ["linux-64"]
+
+description = "NPGenBenchmark reproducible environment"
+
+[dependencies]
+python = "3.8.*"
+numpy = "1.21.*"
+rdkit = "2020.03.2.*"
+boost = "*"
+boost-cpp = "*"
+zlib = "1.2.13.*"
+icu = "68.2.*"
+pip = "*"
+
+[tasks]
+pip-deps = "pip install pandas huggingface_hub scikit-learn scipy tqdm torch fcd_torch -e ."

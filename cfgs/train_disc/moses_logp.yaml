@@ -1,0 +1,63 @@
+# debug
+debug: no # deprecated
+use_wandb: no
+seed: 123
+
+# save
+tag: moses_logp
+
+# data
+data_dirn: data/processed/moses_brics_all.lmdb
+frag_data_dirn: data/processed/moses_brics_all_fragment.lmdb
+frag_smi_to_idx_fn: data/processed/moses_brics_all_fragment_to_idx.pkl
+fm_model_dirn: save/flow_model/moses
+calc_prop: logp # (logp, nring, tpsa, qed)
+
+# model embedders and linears
+in_frag_rrwp_walk_length: 0
+frag_fully_connected_graph: no
+rrwp_walk_length: 0
+embd_h_dim: 128
+embd_e_dim: 64
+frag_g_dim: 197
+embd_frag_bag_type: mask
+hid_dim: 128
+fc_dropout: 0.1
+fc_layer_norm: yes
+fc_activation: silu
+fc_init_method: xavier
+
+# model backbone
+backbone_type: gt_digress
+backbone_n_head: 4
+backbone_n_frag_to_vect_layer: 4
+backbone_n_coarse_graph_propagate_layer: 4
+backbone_dropout: 0.1
+backbone_layer_norm: yes
+backbone_activation: silu
+backbone_init_method: xavier
+
+# loss multiplier
+frag_prop_loss_method: mse
+mol_prop_loss_method: mse
+mol_prop_loss: 1.0
+frag_prop_loss: 0.01
+
+# optimizer
+lr_warmup: yes
+lr_warmup_iter: 10000
+optimizer_type: adamw
+optimizer_betas: [0.9, 0.999]
+lr: 5.0e-4
+weight_decay: 1.0e-12
+
+# training params
+is_clean_only: no # deprecated
+log_every_n_iter: 10
+eval_every_n_log: 1
+bs: 256
+grad_clip: 8.0
+
+# system
+n_worker: 4
+use_ema: yes
