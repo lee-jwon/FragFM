@@ -526,24 +526,14 @@ class FragFMGenerator:
 
             # recon
             try:
-                if "moses" in self.cfg.data_dirn:
-                    m = reconstruct_to_rdmol(
-                        h, e_index, e, is_relaxed=False, get_largest=True
-                    )
-                elif "guacamol" in self.cfg.data_dirn:
-                    m = reconstruct_to_rdmol(
-                        h, e_index, e, is_relaxed=True, get_largest=True
-                    )
-                elif "zinc250k" in self.cfg.data_dirn:
-                    m = reconstruct_to_rdmol(
-                        h, e_index, e, is_relaxed=True, get_largest=True
-                    )
-                elif "npgen" in self.cfg.data_dirn:
-                    m = reconstruct_to_rdmol(
-                        h, e_index, e, is_relaxed=False, get_largest=True
-                    )
+                # In case of non-charged molecules, set is_relaxed to False
+                if "moses" in self.cfg.data_dirn or "npgen" in self.cfg.data_dirn:
+                    is_relaxed = False
                 else:
-                    raise NotImplementedError
+                    is_relaxed = True
+                m = reconstruct_to_rdmol(
+                    h, e_index, e, is_relaxed=is_relaxed, get_largest=True
+                )
                 smi = Chem.MolToSmiles(m)
                 assert not "." in smi
 
