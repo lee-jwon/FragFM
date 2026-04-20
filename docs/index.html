@@ -64,8 +64,7 @@
   <title>FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching</title>
 
   <!-- Favicon and App Icons -->
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="static/images/favicon.svg">
 
   <!-- Critical CSS - Load synchronously -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
@@ -139,6 +138,18 @@
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
     <i class="fas fa-chevron-up"></i>
   </button>
+
+  <!-- Section TOC nav -->
+  <nav class="toc-nav" aria-label="Section navigation">
+    <a href="#sec-abstract" data-section="sec-abstract"><span class="toc-label">Abstract</span><span class="toc-dot"></span></a>
+    <a href="#sec-contributions" data-section="sec-contributions"><span class="toc-label">Contributions</span><span class="toc-dot"></span></a>
+    <a href="#sec-npgen" data-section="sec-npgen"><span class="toc-label">NPGen</span><span class="toc-dot"></span></a>
+    <a href="#sec-quality" data-section="sec-quality"><span class="toc-label">Quality</span><span class="toc-dot"></span></a>
+    <a href="#sec-samples" data-section="sec-samples"><span class="toc-label">Samples</span><span class="toc-dot"></span></a>
+    <a href="#sec-control" data-section="sec-control"><span class="toc-label">Control</span><span class="toc-dot"></span></a>
+    <a href="#sec-efficiency" data-section="sec-efficiency"><span class="toc-label">Efficiency</span><span class="toc-dot"></span></a>
+    <a href="#sec-synthesis" data-section="sec-synthesis"><span class="toc-label">Synthesis</span><span class="toc-dot"></span></a>
+  </nav>
 
   <main id="main-content">
   <section class="hero">
@@ -224,7 +235,7 @@
 <!-- End hero figure -->
 
 <!-- Paper abstract -->
-<section class="section hero is-light">
+<section id="sec-abstract" class="section hero is-light">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
@@ -242,7 +253,7 @@
 
 
 <!-- Contributions -->
-<section class="section">
+<section id="sec-contributions" class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Contributions</h2>
 
@@ -354,7 +365,7 @@
 
 
 <!-- NPGen benchmark -->
-<section class="section hero is-light">
+<section id="sec-npgen" class="section hero is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">NPGen: A Natural Product Benchmark</h2>
     <div class="content has-text-justified">
@@ -368,7 +379,7 @@
     </figure>
     <figure class="publication-figure figure-compact" style="margin-top:1.5rem;">
       <img src="static/images/paper/npgen_example_molecules.png" alt="Representative NPGen molecules" loading="lazy"/>
-      <figcaption><b>Representative NPGen molecules</b> with NPClassifier pathway/superclass/class annotations.</figcaption>
+      <figcaption><b>Representative NPGen molecules</b> with NP-Classifier pathway/superclass/class annotations.</figcaption>
     </figure>
   </div>
 </section>
@@ -376,7 +387,7 @@
 
 
 <!-- Qualitative generation results -->
-<section class="section">
+<section id="sec-quality" class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Generation Quality on NPGen</h2>
     <div class="content has-text-justified">
@@ -394,7 +405,7 @@
 
 
 <!-- Sample gallery across datasets -->
-<section class="section">
+<section id="sec-samples" class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Generated Sample Gallery</h2>
     <div class="content has-text-justified">
@@ -426,7 +437,7 @@
 
 
 <!-- Property controllability -->
-<section class="section hero is-light">
+<section id="sec-control" class="section hero is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Property-Controlled Generation</h2>
     <div class="content has-text-justified">
@@ -454,7 +465,7 @@
 
 
 <!-- Sampling efficiency -->
-<section class="section">
+<section id="sec-efficiency" class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Sampling Efficiency</h2>
     <div class="content has-text-justified">
@@ -478,7 +489,7 @@
 
 
 <!-- Synthesizability + fragment-bag flexibility (from appendix) -->
-<section class="section hero is-light">
+<section id="sec-synthesis" class="section hero is-light">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Synthesizability &amp; Fragment-Bag Flexibility</h2>
     <div class="content has-text-justified">

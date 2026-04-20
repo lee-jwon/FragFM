@@ -119,6 +119,41 @@ function setupVideoCarouselAutoplay() {
     });
 }
 
+// Section TOC nav — active state on scroll + smooth jump
+function setupTocNav() {
+    const links = document.querySelectorAll('.toc-nav a[data-section]');
+    if (!links.length) return;
+
+    const sectionToLink = new Map();
+    links.forEach(link => {
+        const sec = document.getElementById(link.dataset.section);
+        if (sec) sectionToLink.set(sec, link);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const link = sectionToLink.get(entry.target);
+            if (!link) return;
+            links.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    }, {
+        rootMargin: '-25% 0px -65% 0px',
+        threshold: 0
+    });
+
+    sectionToLink.forEach((_, sec) => observer.observe(sec));
+
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.getElementById(link.dataset.section);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+}
+
 $(document).ready(function() {
     // Check for click events on the navbar burger icon
 
@@ -138,5 +173,8 @@ $(document).ready(function() {
 
     // Setup video autoplay for carousel
     setupVideoCarouselAutoplay();
+
+    // Setup section TOC nav
+    setupTocNav();
 
 })
