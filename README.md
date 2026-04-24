@@ -1,6 +1,6 @@
 # FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching
 
-Official implementation of **FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching** by Joongwon Lee<sup>&#42;</sup>, Seongwhan Kim<sup>&#42;</sup>, Seokhyun Moon<sup>&#42;</sup>, Hyeunwoo Kim<sup>†</sup>, and Woo Youn Kim<sup>†</sup>. \[[OpenReview](https://openreview.net/forum?id=tr6vRn2aPg)\] \[[arXiv](https://arxiv.org/abs/2502.15805)\]
+Official implementation of **FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching** by Joongwon Lee<sup>&#42;</sup>, Seongwhan Kim<sup>&#42;</sup>, Seokhyun Moon<sup>&#42;</sup>, Hyeunwoo Kim<sup>†</sup>, and Woo Youn Kim<sup>†</sup>. \[[Project Page](https://lee-jwon.github.io/FragFM/)\] \[[OpenReview](https://openreview.net/forum?id=tr6vRn2aPg)\] \[[arXiv](https://arxiv.org/abs/2502.15805)\]
 
 > [!NOTE]
 > This repository contains the official implementation of the **[FragFM Model](#fragfm-model)** and the **[NPGen Benchmark](#npgen-benchmark)** introduced in the paper.
