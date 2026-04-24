@@ -1855,3 +1855,252 @@ a:focus {
   from { transform: translateX(100%); }
   to   { transform: translateX(0); }
 }
+
+/* ===================================================
+   MOBILE OVERRIDES — placed at end to win cascade over
+   any same-specificity rule defined later in this file
+   =================================================== */
+@media screen and (max-width: 768px) {
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+    -webkit-text-size-adjust: 100%;
+  }
+  #main-content, main {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  /* Section & container widths */
+  .section {
+    padding: 2rem 0.75rem !important;
+  }
+  .section.hero-figure {
+    padding: 0.5rem 0.75rem 0.75rem !important;
+  }
+  .hero .hero-body {
+    padding: 2rem 0.75rem !important;
+  }
+  .container,
+  .container.is-max-desktop {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Bulma columns would otherwise extend -0.75rem past parent */
+  .columns {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+  }
+  .column {
+    padding: 0.5rem !important;
+  }
+  .column.is-four-fifths,
+  .column.is-8 {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Titles scale down */
+  .publication-title {
+    font-size: 1.45rem !important;
+    line-height: 1.25 !important;
+  }
+  .title.is-3 {
+    font-size: 1.25rem !important;
+    padding: 0.3rem 0.5rem 0.28rem !important;
+    margin-bottom: 1.1rem !important;
+    line-height: 1.2 !important;
+  }
+  .subsection-title {
+    font-size: 0.98rem !important;
+    line-height: 1.3 !important;
+    padding: 0 0.25rem !important;
+    word-break: keep-all;
+  }
+  .subsection-title::before {
+    margin-bottom: 0.4rem !important;
+  }
+
+  /* Content body */
+  .content.has-text-justified,
+  .content.has-text-justified p {
+    font-size: 0.9rem !important;
+    line-height: 1.55 !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  .content,
+  .content p {
+    max-width: 100% !important;
+  }
+
+  /* Tabs wrap, shrink */
+  .model-tabs {
+    flex-wrap: wrap !important;
+    gap: 0.3rem !important;
+    justify-content: flex-start !important;
+  }
+  .model-tab {
+    flex: 0 1 auto !important;
+    font-size: 0.7rem !important;
+    padding: 0.35rem 0.55rem !important;
+    white-space: nowrap;
+  }
+  .model-tab-ours .ours-badge {
+    font-size: 0.55rem !important;
+    padding: 0.05rem 0.3rem !important;
+  }
+
+  /* Model browser containers */
+  .model-browser,
+  .model-browser.benchmark-browser {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .model-pane-wrap {
+    max-width: 100% !important;
+    overflow: hidden;
+  }
+  .model-browser.benchmark-browser .model-pane,
+  .model-pane {
+    padding: 0.8rem 0.5rem !important;
+    max-width: 100% !important;
+  }
+  .model-browser.benchmark-browser .model-pane {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .model-pane > img {
+    padding: 0.25rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Tables */
+  .result-table-wrap,
+  .result-table-wrap.bench-table,
+  .result-table-wrap.ae-recon-table {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .result-table.result-bench {
+    font-size: 0.64rem !important;
+    min-width: 460px;
+  }
+  .result-table.result-bench thead th,
+  .result-table.result-bench tbody td {
+    padding: 0.25rem 0.3rem !important;
+  }
+  .result-table:not(.result-bench) {
+    font-size: 0.7rem !important;
+    width: 100% !important;
+  }
+
+  /* Two-col / three-col / step-time all stack */
+  .two-col,
+  .two-col.ae-split,
+  .two-col.synth-split,
+  .figure-row.two-col,
+  .figure-row.three-col,
+  .figure-row.step-time {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    max-width: 100% !important;
+  }
+
+  /* Formulas */
+  .formula-callout {
+    max-width: 100% !important;
+    padding: 0.85rem 0.75rem !important;
+  }
+  .formula-math {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.78rem !important;
+    max-width: 100% !important;
+  }
+  .formula-legend {
+    font-size: 0.76rem !important;
+  }
+
+  /* Figures */
+  .publication-figure,
+  .publication-figure.figure-wide,
+  .publication-figure.figure-compact,
+  .publication-figure.figure-tiny,
+  .figure-row,
+  .figure-row.figure-compact,
+  .schematic-wrap,
+  .schematic-wrap.schematic-wide,
+  .bibtex-wrap,
+  .hero-figure .publication-figure {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .publication-figure img,
+  .sample-gallery img,
+  figure img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  .publication-figure figcaption {
+    font-size: 0.72rem !important;
+    text-align: left;
+  }
+  .schematic-wrap {
+    padding: 0.5rem !important;
+  }
+  .schematic-wrap svg {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+  }
+
+  /* Pane label wraps cleanly */
+  .pane-table-label {
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+    white-space: normal !important;
+    word-break: break-word;
+  }
+  .table-label-sub {
+    display: inline;
+  }
+
+  /* Contributions */
+  .contrib-card,
+  .contrib-solve {
+    padding: 0.7rem 0.8rem !important;
+  }
+
+  /* BibTeX */
+  #bibtex-code,
+  .bibtex-wrap pre {
+    font-size: 0.66rem !important;
+    padding: 0.6rem !important;
+    overflow-x: auto !important;
+    max-width: 100% !important;
+    white-space: pre;
+  }
+  .cite-modal-panel {
+    max-width: calc(100vw - 1.5rem) !important;
+    padding: 1rem 0.9rem 0.85rem !important;
+  }
+
+  /* TOC drawer uses more viewport */
+  .toc-drawer-panel {
+    width: min(85vw, 300px) !important;
+  }
+}
