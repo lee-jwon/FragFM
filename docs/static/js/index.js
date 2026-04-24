@@ -97,24 +97,6 @@ function copyBibTeX() {
     }
 }
 
-// Scroll to top functionality
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
-
-// Show/hide scroll to top button
-window.addEventListener('scroll', function() {
-    const scrollButton = document.querySelector('.scroll-to-top');
-    if (window.pageYOffset > 300) {
-        scrollButton.classList.add('visible');
-    } else {
-        scrollButton.classList.remove('visible');
-    }
-});
-
 // Video carousel autoplay when in view
 function setupVideoCarouselAutoplay() {
     const carouselVideos = document.querySelectorAll('.results-carousel video');
@@ -169,7 +151,7 @@ function setupModelBrowser() {
 
 // Section TOC nav — active state on scroll + smooth jump (desktop sidebar + mobile drawer)
 function setupTocNav() {
-    const links = document.querySelectorAll('.toc-nav a[data-section], .toc-drawer-list a[data-section]');
+    const links = document.querySelectorAll('.toc-drawer-list a[data-section]');
     if (!links.length) return;
 
     const sectionToLinks = new Map();
