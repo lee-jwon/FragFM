@@ -87,6 +87,15 @@
   <!-- Fonts - Optimized loading -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- MathJax for equation rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
   <!-- Defer non-critical JavaScript -->
   <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
@@ -139,16 +148,40 @@
     <i class="fas fa-chevron-up"></i>
   </button>
 
+  <!-- Mobile FAB (hamburger) + drawer — shown on narrow screens only -->
+  <button type="button" class="toc-fab" onclick="openTocDrawer()" aria-label="Open section menu" aria-haspopup="dialog" aria-controls="toc-drawer">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div id="toc-drawer" class="toc-drawer" role="dialog" aria-modal="true" aria-label="Section menu" hidden>
+    <div class="toc-drawer-backdrop" onclick="closeTocDrawer()"></div>
+    <div class="toc-drawer-panel">
+      <div class="toc-drawer-head">
+        <span class="toc-drawer-title">Sections</span>
+        <button type="button" class="toc-drawer-close" onclick="closeTocDrawer()" aria-label="Close section menu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc-drawer-list">
+        <a href="#sec-abstract" data-section="sec-abstract">Abstract</a>
+        <a href="#sec-contributions" data-section="sec-contributions">Contributions</a>
+        <a href="#sec-method" data-section="sec-method">Method</a>
+        <a href="#sec-benchmarks" data-section="sec-benchmarks">Benchmarks</a>
+        <a href="#sec-conditional" data-section="sec-conditional">Conditional Generation</a>
+        <a href="#sec-scalability" data-section="sec-scalability">Scalability</a>
+        <a href="#sec-additional" data-section="sec-additional">Additional Results</a>
+      </nav>
+    </div>
+  </div>
+
   <!-- Section TOC nav -->
   <nav class="toc-nav" aria-label="Section navigation">
     <a href="#sec-abstract" data-section="sec-abstract"><span class="toc-label">Abstract</span><span class="toc-dot"></span></a>
     <a href="#sec-contributions" data-section="sec-contributions"><span class="toc-label">Contributions</span><span class="toc-dot"></span></a>
-    <a href="#sec-npgen" data-section="sec-npgen"><span class="toc-label">NPGen</span><span class="toc-dot"></span></a>
-    <a href="#sec-quality" data-section="sec-quality"><span class="toc-label">Quality</span><span class="toc-dot"></span></a>
-    <a href="#sec-samples" data-section="sec-samples"><span class="toc-label">Samples</span><span class="toc-dot"></span></a>
-    <a href="#sec-control" data-section="sec-control"><span class="toc-label">Control</span><span class="toc-dot"></span></a>
-    <a href="#sec-efficiency" data-section="sec-efficiency"><span class="toc-label">Efficiency</span><span class="toc-dot"></span></a>
-    <a href="#sec-synthesis" data-section="sec-synthesis"><span class="toc-label">Synthesis</span><span class="toc-dot"></span></a>
+    <a href="#sec-method" data-section="sec-method"><span class="toc-label">Method</span><span class="toc-dot"></span></a>
+    <a href="#sec-benchmarks" data-section="sec-benchmarks"><span class="toc-label">Benchmarks</span><span class="toc-dot"></span></a>
+    <a href="#sec-conditional" data-section="sec-conditional"><span class="toc-label">Conditional Generation</span><span class="toc-dot"></span></a>
+    <a href="#sec-scalability" data-section="sec-scalability"><span class="toc-label">Scalability</span><span class="toc-dot"></span></a>
+    <a href="#sec-additional" data-section="sec-additional"><span class="toc-label">Additional Results</span><span class="toc-dot"></span></a>
   </nav>
 
   <main id="main-content">
@@ -183,16 +216,6 @@
 
                   <div class="column has-text-centered">
                     <div class="publication-links">
-                      <span class="link-block">
-                        <a href="FragFM.pdf" target="_blank"
-                        class="external-link button is-normal is-rounded is-dark">
-                        <span class="icon">
-                          <i class="fas fa-file-pdf"></i>
-                        </span>
-                        <span>Paper</span>
-                      </a>
-                    </span>
-
                   <span class="link-block">
                     <a href="https://github.com/lee-jwon/FragFM" target="_blank"
                     class="external-link button is-normal is-rounded is-dark">
@@ -212,6 +235,15 @@
                   <span>arXiv</span>
                 </a>
               </span>
+
+              <span class="link-block">
+                <a href="#" onclick="event.preventDefault(); openCiteModal();" class="external-link button is-normal is-rounded is-dark" role="button" aria-haspopup="dialog" aria-controls="cite-modal">
+                  <span class="icon">
+                    <i class="fas fa-quote-right"></i>
+                  </span>
+                  <span>Cite</span>
+                </a>
+              </span>
             </div>
           </div>
         </div>
@@ -219,6 +251,33 @@
     </div>
   </div>
 </section>
+
+<!-- Citation modal -->
+<div id="cite-modal" class="cite-modal" role="dialog" aria-modal="true" aria-labelledby="cite-modal-title" hidden>
+  <div class="cite-modal-backdrop" onclick="closeCiteModal()"></div>
+  <div class="cite-modal-panel">
+    <button type="button" class="cite-modal-close" onclick="closeCiteModal()" aria-label="Close citation dialog">
+      <i class="fas fa-times"></i>
+    </button>
+    <h3 id="cite-modal-title" class="cite-modal-title">Cite this work</h3>
+    <p class="cite-modal-apa">
+      Lee, J., Kim, S., Moon, S., Kim, H., &amp; Kim, W. Y. (2025). <i>FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching</i>. arXiv preprint <a href="https://arxiv.org/abs/2502.15805" target="_blank" rel="noopener">arXiv:2502.15805</a>.
+    </p>
+    <div class="bibtex-header">
+      <span class="bibtex-label">BibTeX</span>
+      <button type="button" class="copy-bibtex-btn" onclick="copyBibTeX()" aria-label="Copy BibTeX">
+        <i class="fas fa-copy"></i>
+        <span class="copy-text">Copy</span>
+      </button>
+    </div>
+<pre id="bibtex-code"><code>@article{lee2025fragfm,
+  title   = {FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching},
+  author  = {Lee, Joongwon and Kim, Seonghwan and Moon, Seokhyun and Kim, Hyunwoo and Kim, Woo Youn},
+  journal = {arXiv preprint arXiv:2502.15805},
+  year    = {2025}
+}</code></pre>
+  </div>
+</div>
 
 
 <!-- Hero figure -->
@@ -364,139 +423,404 @@
 <!-- End contributions -->
 
 
-<!-- NPGen benchmark -->
-<section id="sec-npgen" class="section hero is-light">
+<!-- ============================================ -->
+<!-- METHOD — autoencoder + flow-matching w/ fragment bag -->
+<!-- ============================================ -->
+<section id="sec-method" class="section">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">NPGen: A Natural Product Benchmark</h2>
-    <div class="content has-text-justified">
+    <h2 class="title is-3 has-text-centered">Method</h2>
+
+    <div class="content has-text-justified" style="max-width:720px; margin:0 auto 1rem;">
       <p>
-        <b>658,566</b> natural products from COCONUT, average <b>35.0</b> heavy atoms (vs. 21.7 MOSES, 27.9 GuacaMol). Evaluation adds <b>NP-likeness</b> and <b>NP-Classifier</b> divergences that reflect biological functionality rather than saturated distributional overlap.
+        FragFM rests on two ideas. (i) A <b>coarse-to-fine autoencoder</b> compresses an atom-level graph <b>G</b> into a much smaller fragment-level graph <i>𝒢</i> plus a single continuous latent <i>z</i> that carries the atom-level connectivity. (ii) On that fragment-level graph, discrete flow matching (DFM) generates fragment types; to make the huge fragment vocabulary tractable, training and sampling are restricted to a <b>stochastic fragment bag</b> <i>𝓑 ⊂ 𝓕</i>, optimized with an Info-NCE objective.
       </p>
     </div>
-    <figure class="publication-figure figure-compact">
-      <img src="static/images/paper/npgen_umap.png" alt="UMAP of MOSES, GuacaMol, and NPGen" loading="lazy"/>
-      <figcaption><b>Distinct chemical space.</b> UMAP of 5k samples per dataset.</figcaption>
-    </figure>
-    <figure class="publication-figure figure-compact" style="margin-top:1.5rem;">
-      <img src="static/images/paper/npgen_example_molecules.png" alt="Representative NPGen molecules" loading="lazy"/>
-      <figcaption><b>Representative NPGen molecules</b> with NP-Classifier pathway/superclass/class annotations.</figcaption>
-    </figure>
-  </div>
-</section>
-<!-- End NPGen benchmark -->
 
+    <!-- Sub: Coarse-to-fine autoencoder -->
+    <div class="subsection">
+      <h3 class="subsection-title">Coarse-to-Fine Autoencoder</h3>
+      <div class="content has-text-justified">
+        <p>
+          The encoder first applies a <b>deterministic fragmentation rule</b> (BRICS) to split <b>G</b> into fragments, then a graph neural network <i>φ<sub>enc</sub></i> encodes both into a latent <i>z</i> that remembers which atoms were bonded across fragment cuts. The decoder <i>φ<sub>dec</sub></i> scores candidate inter-fragment atom pairs and feeds those scores into the <b>Blossom matching algorithm</b> to recover exact atom-level edges <b>E</b>.
+        </p>
+      </div>
 
-<!-- Qualitative generation results -->
-<section id="sec-quality" class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Generation Quality on NPGen</h2>
-    <div class="content has-text-justified">
-      <p>
-        FragFM beats atom-based DiGress and DeFoG on NP-likeness and NP-Classifier metrics while keeping validity and novelty high — and samples <b>~5× faster than DiGress</b>.
-      </p>
+      <div class="two-col ae-split">
+        <figure class="publication-figure">
+          <img src="static/images/paper/autoencoder_overview.png" alt="Coarse-to-fine autoencoder overview" loading="lazy"/>
+          <figcaption><b>Coarse-to-fine autoencoder.</b> Atom graph <b>G</b> is rule-compressed to fragment graph <i>𝒢</i>; a GNN encoder emits latent <i>z</i>; decoder + Blossom matching reconstruct atom-level edges.</figcaption>
+        </figure>
+        <div class="result-table-wrap ae-recon-table">
+          <div class="table-label">Reconstruction accuracy <span class="table-label-sub">— test set (%)</span></div>
+          <table class="result-table result-bench">
+            <thead>
+              <tr><th>Dataset</th><th>Bond</th><th>Graph</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>MOSES</td><td>99.99</td><td>99.93</td></tr>
+              <tr><td>GuacaMol</td><td>99.98</td><td>99.42</td></tr>
+              <tr><td>ZINC250k</td><td>99.64</td><td>98.71</td></tr>
+              <tr><td>NPGen</td><td>99.71</td><td>97.43</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="formula-callout" style="margin-top:1.25rem;">
+        <div class="formula-math">
+          $$ \textbf{Encoder:}\;\; \mathbf{G}\xrightarrow{\text{Rule}}\mathcal{G},\quad (\mathbf{G},\mathcal{G})\xrightarrow{\phi_{\text{enc}}} z $$
+          $$ \textbf{Decoder:}\;\; (\mathcal{G},z)\xrightarrow{\phi_{\text{dec}}}\text{score}\xrightarrow{\text{Blossom}}\mathbf{E} $$
+        </div>
+        <div class="formula-legend">
+          <div><span class="lbl-accent">reconstruction</span> the fragment-level graph + latent <i>z</i> is a near-lossless compression, achieving &gt;99% bond-level accuracy across all four benchmarks (see table).</div>
+        </div>
+      </div>
     </div>
-    <figure class="publication-figure figure-compact">
-      <img src="static/images/paper/main_npgen_examples.png" alt="DiGress vs FragFM samples on NPGen" loading="lazy"/>
-      <figcaption><b>NPGen samples (31–40 heavy atoms)</b>: DiGress (top) vs. FragFM (bottom). Implausible moieties highlighted in red.</figcaption>
-    </figure>
-  </div>
-</section>
-<!-- End qualitative -->
 
+    <!-- Sub: Flow matching + fragment bag + Info-NCE -->
+    <div class="subsection">
+      <h3 class="subsection-title">Fragment-Level Flow Matching with Stochastic Bag</h3>
+      <div class="content has-text-justified">
+        <p>
+          On the coarse graph <i>X = (𝒢, z)</i>, FragFM runs discrete flow matching (DFM) over fragment types and continuous flow matching over the latent. To avoid a softmax over the full fragment vocabulary <i>𝓕</i> (which can exceed 10⁵ fragments), each step samples a <b>bag</b> <i>𝓑 ⊂ 𝓕</i> of size <i>N</i> and restricts the denoiser's softmax to <i>𝓑</i>. A neural density-ratio estimator <i>f<sub>θ</sub>(X<sub>t</sub>, x)</i> is trained with an Info-NCE loss against one positive + <i>N−1</i> negative fragments:
+        </p>
+      </div>
 
-<!-- Sample gallery across datasets -->
-<section id="sec-samples" class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Generated Sample Gallery</h2>
-    <div class="content has-text-justified">
-      <p>
-        Random valid molecules generated by FragFM across three benchmarks — from drug-like small molecules on <b>MOSES</b> and <b>GuacaMol</b> to large, structurally complex natural products on <b>NPGen</b>.
-      </p>
-    </div>
-    <div class="sample-gallery">
-      <figure class="publication-figure">
-        <figcaption class="sample-header">MOSES</figcaption>
-        <img src="static/images/paper/samples_moses.png" alt="FragFM-generated molecules on MOSES (drug-like small molecules)" loading="lazy"/>
-      </figure>
-      <figure class="publication-figure">
-        <figcaption class="sample-header">GuacaMol</figcaption>
-        <img src="static/images/paper/samples_guacamol.png" alt="FragFM-generated molecules on GuacaMol" loading="lazy"/>
-      </figure>
-      <figure class="publication-figure">
-        <figcaption class="sample-header">NPGen · up to 30 heavy atoms</figcaption>
-        <img src="static/images/paper/samples_npgen_fragfm_small.png" alt="FragFM-generated natural product molecules on NPGen (small)" loading="lazy"/>
-      </figure>
-      <figure class="publication-figure">
-        <figcaption class="sample-header">NPGen · 31–60 heavy atoms</figcaption>
-        <img src="static/images/paper/samples_npgen_fragfm_large.png" alt="FragFM-generated natural product molecules on NPGen (large)" loading="lazy"/>
-      </figure>
-    </div>
-  </div>
-</section>
-<!-- End sample gallery -->
+      <div class="formula-callout" style="margin-top:0.75rem;">
+        <div class="formula-math">
+          $$ \mathcal{L}(\theta)
+            = -\,\mathbb{E}_{\mathcal{B}}\!\left[\,\log
+              \frac{f_{\theta}(X_t,\,x^{+})}
+                   {\displaystyle\sum_{y\in\mathcal{B}} f_{\theta}(X_t,\,y)}
+            \right] $$
+        </div>
+        <div class="formula-legend">
+          <div><span class="lbl-accent">Info-NCE</span> pushes the positive fragment <i>x⁺</i> above <i>N−1</i> sampled negatives inside <i>𝓑</i>, so <i>f<sub>θ</sub></i> approximates the density ratio <i>p<sub>1|t</sub>(x|X<sub>t</sub>) / p<sub>1</sub>(x)</i>.</div>
+          <div><span class="lbl-accent">scaling</span> training and sampling cost is <i>O(N)</i> per step, independent of <i>|𝓕|</i> — decoupling model cost from vocabulary size.</div>
+        </div>
+      </div>
 
+      <div class="content has-text-justified" style="margin-top:1.25rem;">
+        <p>
+          At inference, the trained <i>f<sub>θ</sub></i> defines an <b>in-bag posterior</b> over <i>𝓑</i>, which the sampler integrates into a one-step <b>Euler transition kernel</b>:
+        </p>
+      </div>
 
-<!-- Property controllability -->
-<section id="sec-control" class="section hero is-light">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Property-Controlled Generation</h2>
-    <div class="content has-text-justified">
-      <p>
-        Two guidance knobs: classifier guidance <i>λ<sub>X</sub></i> on the flow, and fragment-bag reweighting <i>λ<sub>𝓑</sub></i>. On the hard JAK2 docking-score task (top 0.08% of ZINC250k), bag guidance alone reaches the target while DiGress collapses in validity.
-      </p>
-    </div>
-    <div class="figure-row three-col figure-compact">
-      <figure class="publication-figure">
-        <img src="static/images/paper/qed_fcd.png" alt="QED MAE-FCD" loading="lazy"/>
-        <figcaption><b>QED.</b> MAE–FCD across target values.</figcaption>
-      </figure>
-      <figure class="publication-figure">
-        <img src="static/images/paper/zinc_jak2_kde.png" alt="JAK2 docking KDE" loading="lazy"/>
-        <figcaption><b>JAK2 KDE.</b> Only FragFM reaches −11.0&nbsp;kcal/mol.</figcaption>
-      </figure>
-      <figure class="publication-figure">
-        <img src="static/images/paper/zinc_jak2_bag_guidance.png" alt="Bag guidance effect" loading="lazy"/>
-        <figcaption><b>Bag guidance.</b> <i>λ<sub>𝓑</sub></i> shifts MAE–FCD curves; red = bag-only (<i>λ<sub>X</sub></i>=0).</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-<!-- End property controllability -->
+      <div class="formula-callout" style="margin-top:0.5rem;">
+        <div class="formula-math">
+          $$ p^{\theta}_{1|t,\mathcal{B}}(x_1 \mid X_t, \mathcal{B})
+              = \frac{\mathbf{1}_{\mathcal{B}}(x_1)\, f_{\theta}(X_t, x_1)}
+                     {\sum_{y\in\mathcal{B}} f_{\theta}(X_t, y)} $$
+          $$ p^{\theta}_{t+\Delta t|t}(x_{t+\Delta t}\mid X_t, \mathcal{B})
+              = \mathbb{E}_{x_1\sim p^{\theta}_{1|t,\mathcal{B}}}
+                \!\left[\, p_{t+\Delta t|t}(x_{t+\Delta t}\mid X_t, x_1)\,\right] $$
+        </div>
+        <div class="formula-legend">
+          <div><span class="lbl-accent">posterior</span> softmax over the <i>sampled</i> bag <i>𝓑</i> — never over the full vocabulary <i>𝓕</i>.</div>
+          <div><span class="lbl-accent">kernel</span> a standard DFM Euler step; as <i>N→|𝓕|</i> it converges to the exact transition kernel, so small <i>Δt</i> + moderate <i>N</i> suffices in practice.</div>
+        </div>
+      </div>
 
-
-<!-- Sampling efficiency -->
-<section id="sec-efficiency" class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Sampling Efficiency</h2>
-    <div class="content has-text-justified">
-      <p>
-        Denoising at the fragment level — not over individual atoms — keeps validity above <b>95%</b> and FCD below <b>1.0</b> even under aggressive step reduction, with <b>~5× faster</b> wall-clock time than DiGress on NPGen.
-      </p>
-    </div>
-    <div class="figure-row step-time figure-compact">
-      <figure class="publication-figure figure-step">
-        <img src="static/images/paper/sample_step.png" alt="Sampling step ablation" loading="lazy"/>
-        <figcaption><b>Step ablation.</b> Atom-based baselines collapse as steps shrink; FragFM holds up.</figcaption>
-      </figure>
-      <figure class="publication-figure figure-time">
-        <img src="static/images/paper/sample_time.png" alt="Wall-clock sampling time" loading="lazy"/>
-        <figcaption><b>Wall-clock time.</b> MOSES and NPGen; (·) = sampling steps.</figcaption>
+      <figure class="publication-figure" style="max-width:500px; margin:1.5rem auto 0;">
+        <img src="static/images/paper/method_parameterization.png" alt="Parameterization of fragment embedder and prediction head f_theta" loading="lazy"/>
+        <figcaption><b>Parameterization of <i>f<sub>θ</sub></i>.</b> (left) Each fragment in <i>𝓑</i> is embedded by a GNN fragment embedder; coarse-graph nodes are mapped to fixed-size vectors; <i>f<sub>θ</sub>(X<sub>t</sub>, x)</i> is their inner product. (right) The coarse-graph embedder first vectorizes each node, then processes the whole graph with a graph transformer. Shared fragment embeddings let FragFM generalize to fragments unseen at training.</figcaption>
       </figure>
     </div>
   </div>
 </section>
-<!-- End sampling efficiency -->
+<!-- End Method -->
 
 
-<!-- Synthesizability + fragment-bag flexibility (from appendix) -->
-<section id="sec-synthesis" class="section hero is-light">
+<!-- ============================================ -->
+<!-- BENCHMARKS — NPGen + Quality + Sample Gallery -->
+<!-- ============================================ -->
+<section id="sec-benchmarks" class="section hero is-light">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Synthesizability &amp; Fragment-Bag Flexibility</h2>
-    <div class="content has-text-justified">
-      <p>
-        <b>AIZynthFinder retrosynthesis</b> on 25k MOSES samples: FragFM reaches <b>77% solved</b>, close to the MOSES test set (80%). Swapping the fragment bag to <b>fragments drawn from solved (synthesizable) molecules</b> — no retraining — pushes it to <b>85%</b>, exceeding the dataset itself.
-      </p>
+    <h2 class="title is-3 has-text-centered">Benchmarks</h2>
+
+    <!-- Sub: NPGen intro -->
+    <div class="subsection">
+      <h3 class="subsection-title">NPGen — A Natural Product Benchmark</h3>
+      <div class="content has-text-justified">
+        <p>
+          <b>658,566</b> natural products from COCONUT, average <b>35.0</b> heavy atoms (vs. 21.7 MOSES, 27.9 GuacaMol). Evaluation adds <b>NP-likeness</b> and <b>NP-Classifier</b> divergences that reflect biological functionality rather than saturated distributional overlap.
+        </p>
+      </div>
+      <figure class="publication-figure figure-compact">
+        <img src="static/images/paper/npgen_umap.png" alt="UMAP of MOSES, GuacaMol, and NPGen" loading="lazy"/>
+        <figcaption><b>Distinct chemical space.</b> UMAP of 5k samples per dataset.</figcaption>
+      </figure>
+      <figure class="publication-figure figure-compact" style="margin-top:1.5rem;">
+        <img src="static/images/paper/npgen_example_molecules.png" alt="Representative NPGen molecules" loading="lazy"/>
+        <figcaption><b>Representative NPGen molecules</b> with NP-Classifier pathway/superclass/class annotations.</figcaption>
+      </figure>
     </div>
+
+    <!-- Sub: Quantitative results across benchmarks -->
+    <div class="subsection">
+      <h3 class="subsection-title">Quantitative Results</h3>
+      <div class="content has-text-justified">
+        <p>
+          FragFM is a <b>graph generative model</b>, evaluated against atom- and fragment-level graph baselines on four standard molecular-generation benchmarks — matching or setting SOTA across all of them. <span class="legend-dot legend-ar"></span><span class="legend-text">autoregressive / sequence</span> and <span class="legend-dot legend-os"></span><span class="legend-text">one-shot diffusion / flow</span> baselines are shown for context. <b>Bold</b> = best; <u>underline</u> = second-best.
+        </p>
+      </div>
+
+      <div class="model-browser benchmark-browser">
+        <div class="model-tabs" role="tablist" aria-label="Benchmark selector">
+          <button class="model-tab is-active" data-model="moses" aria-selected="true">MOSES</button>
+          <button class="model-tab" data-model="guacamol">GuacaMol</button>
+          <button class="model-tab" data-model="zinc">ZINC250k</button>
+          <button class="model-tab" data-model="npgen">NPGen</button>
+        </div>
+        <div class="model-pane-wrap">
+
+          <!-- MOSES pane -->
+          <div class="model-pane is-active" data-model="moses">
+            <div class="pane-table-label">MOSES <span class="table-label-sub">— 25k generated molecules</span></div>
+        <table class="result-table result-bench">
+          <thead>
+            <tr>
+              <th>Model</th><th>Valid ↑</th><th>Unique ↑</th><th>Novel ↑</th><th>Filters ↑</th><th>FCD ↓</th><th>SNN ↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-training"><td>Training set</td><td>100.0</td><td>100.0</td><td>–</td><td>100.0</td><td>0.48</td><td>0.59</td></tr>
+            <tr class="model-ar"><td>GraphINVENT</td><td>96.4</td><td>99.8</td><td>–</td><td>95.0</td><td>1.22</td><td>0.54</td></tr>
+            <tr class="model-ar"><td>JT-VAE</td><td><b>100.0</b></td><td><b>100.0</b></td><td><b>99.9</b></td><td>97.8</td><td><u>1.00</u></td><td>0.53</td></tr>
+            <tr class="model-os"><td>DiGress</td><td>85.7</td><td><b>100.0</b></td><td>95.0</td><td>97.1</td><td>1.19</td><td>0.52</td></tr>
+            <tr class="model-os"><td>DisCo</td><td>88.3</td><td><b>100.0</b></td><td><u>97.7</u></td><td>95.6</td><td>1.44</td><td>0.50</td></tr>
+            <tr class="model-os"><td>Cometh</td><td>90.5</td><td><b>100.0</b></td><td>96.4</td><td>97.2</td><td>1.44</td><td>0.51</td></tr>
+            <tr class="model-os"><td>Cometh-PC</td><td>90.5</td><td><u>99.9</u></td><td>92.6</td><td><b>99.1</b></td><td>1.27</td><td>0.54</td></tr>
+            <tr class="model-os"><td>DeFoG</td><td><u>92.8</u></td><td><u>99.9</u></td><td>92.1</td><td><u>98.9</u></td><td>1.95</td><td><u>0.55</u></td></tr>
+            <tr class="highlight"><td>FragFM <span class="no-retrain">(ours)</span></td><td><u>99.8</u></td><td><b>100.0</b></td><td>87.1</td><td><b>99.1</b></td><td><b>0.58</b></td><td><b>0.56</b></td></tr>
+          </tbody>
+        </table>
+          </div><!-- /pane moses -->
+
+          <!-- GuacaMol pane -->
+          <div class="model-pane" data-model="guacamol">
+            <div class="pane-table-label">GuacaMol <span class="table-label-sub">— 10k generated molecules</span></div>
+        <table class="result-table result-bench">
+          <thead>
+            <tr>
+              <th>Model</th><th>Val. ↑</th><th>V.U. ↑</th><th>V.U.N. ↑</th><th>KL Div. ↑</th><th>FCD ↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-training"><td>Training set</td><td>100.0</td><td>100.0</td><td>–</td><td>99.9</td><td>92.8</td></tr>
+            <tr><td>MCTS</td><td><b>100.0</b></td><td><b>100.0</b></td><td>95.4</td><td>82.2</td><td>1.5</td></tr>
+            <tr class="model-os"><td>DiGress</td><td>85.2</td><td>85.2</td><td>85.1</td><td>92.9</td><td>68.0</td></tr>
+            <tr class="model-os"><td>DisCo</td><td>86.6</td><td>86.6</td><td>86.5</td><td>92.6</td><td>59.7</td></tr>
+            <tr class="model-os"><td>Cometh</td><td>94.4</td><td>94.4</td><td>93.5</td><td>94.1</td><td>67.4</td></tr>
+            <tr class="model-os"><td>Cometh-PC</td><td>98.9</td><td>98.9</td><td><u>97.6</u></td><td>96.7</td><td>72.7</td></tr>
+            <tr class="model-os"><td>DeFoG</td><td>99.0</td><td>99.0</td><td><b>97.9</b></td><td><b>97.7</b></td><td>73.8</td></tr>
+            <tr class="highlight"><td>FragFM <span class="no-retrain">(ours)</span></td><td><u>99.7</u></td><td><u>99.3</u></td><td>95.0</td><td><u>97.4</u></td><td><b>85.8</b></td></tr>
+          </tbody>
+        </table>
+          </div><!-- /pane guacamol -->
+
+          <!-- ZINC250k pane -->
+          <div class="model-pane" data-model="zinc">
+            <div class="pane-table-label">ZINC250k <span class="table-label-sub">— 25k generated molecules</span></div>
+            <table class="result-table result-bench">
+              <thead>
+                <tr><th>Model</th><th>Valid ↑</th><th>NSPDK ↓</th><th>FCD ↓</th></tr>
+              </thead>
+              <tbody>
+                <tr class="row-training"><td>Training set</td><td>–</td><td>0.0001</td><td>0.062</td></tr>
+                <tr class="model-ar"><td>GraphAF</td><td>67.92</td><td>0.0432</td><td>16.128</td></tr>
+                <tr class="model-ar"><td>GraphDF</td><td>89.72</td><td>0.1737</td><td>33.899</td></tr>
+                <tr class="model-os"><td>MolHF</td><td>94.75</td><td>0.0709</td><td>22.230</td></tr>
+                <tr class="model-os"><td>GDSS</td><td>97.12</td><td>0.0192</td><td>14.032</td></tr>
+                <tr class="model-os"><td>GSDM</td><td>92.57</td><td>0.0168</td><td>12.435</td></tr>
+                <tr class="model-os"><td>GruM</td><td>98.32</td><td>0.0023</td><td>2.235</td></tr>
+                <tr class="model-os"><td>SwinGNN</td><td>86.16</td><td>0.0047</td><td>4.398</td></tr>
+                <tr class="model-os"><td>DiGress</td><td>94.98</td><td>0.0021</td><td>3.482</td></tr>
+                <tr class="model-os"><td>GGFlow</td><td><u>99.63</u></td><td><u>0.0010</u></td><td><u>1.455</u></td></tr>
+                <tr class="highlight"><td>FragFM <span class="no-retrain">(ours)</span></td><td><b>99.81</b></td><td><b>0.0002</b></td><td><b>0.630</b></td></tr>
+              </tbody>
+            </table>
+          </div><!-- /pane zinc -->
+
+          <!-- NPGen pane -->
+          <div class="model-pane" data-model="npgen">
+            <div class="pane-table-label">NPGen <span class="table-label-sub">— 30k generated natural-product-like molecules</span></div>
+        <table class="result-table result-bench result-bench-npgen">
+          <thead>
+            <tr>
+              <th rowspan="2">Model</th>
+              <th rowspan="2">Val. ↑</th>
+              <th rowspan="2">Unique ↑</th>
+              <th rowspan="2">Novel ↑</th>
+              <th rowspan="2">NP Score<br/>KL Div. ↓</th>
+              <th colspan="3">NP Class KL Div. ↓</th>
+              <th rowspan="2">FCD ↓</th>
+            </tr>
+            <tr>
+              <th>Pathway</th><th>Superclass</th><th>Class</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-training"><td>Training set</td><td>100.0</td><td>100.0</td><td>–</td><td>0.0006</td><td>0.0002</td><td>0.0028</td><td>0.0094</td><td>0.01</td></tr>
+            <tr class="model-ar"><td>GraphAF</td><td>79.1</td><td>63.6</td><td>95.6</td><td>0.8546</td><td>0.9713</td><td>3.3907</td><td>6.6905</td><td>25.11</td></tr>
+            <tr class="model-ar"><td>JT-VAE</td><td><b>100.0</b></td><td>97.2</td><td><u>99.5</u></td><td>0.5437</td><td>0.1055</td><td>1.2895</td><td>2.5645</td><td>4.07</td></tr>
+            <tr class="model-ar"><td>HierVAE</td><td><b>100.0</b></td><td>81.5</td><td>97.7</td><td>0.3021</td><td>0.4230</td><td>0.5771</td><td>1.4073</td><td>8.95</td></tr>
+            <tr class="model-os"><td>DiGress</td><td>85.4</td><td><b>99.7</b></td><td><b>99.9</b></td><td>0.1957</td><td><u>0.0229</u></td><td><u>0.3370</u></td><td><u>1.0309</u></td><td><u>2.05</u></td></tr>
+            <tr class="model-os"><td>DeFoG</td><td>85.9</td><td>98.4</td><td>99.2</td><td><u>0.1550</u></td><td>0.1252</td><td>0.4134</td><td>1.3597</td><td>4.46</td></tr>
+            <tr class="highlight"><td>FragFM <span class="no-retrain">(ours)</span></td><td><u>98.0</u></td><td><u>99.0</u></td><td>95.4</td><td><b>0.0374</b></td><td><b>0.0196</b></td><td><b>0.1482</b></td><td><b>0.3570</b></td><td><b>1.34</b></td></tr>
+          </tbody>
+        </table>
+          </div><!-- /pane npgen -->
+
+        </div><!-- /model-pane-wrap -->
+      </div><!-- /benchmark-browser -->
+    </div>
+
+    <!-- Sub: NPGen samples across models (interactive tab browser) -->
+    <div class="subsection">
+      <h3 class="subsection-title">NPGen Samples Across Models</h3>
+      <div class="content has-text-justified">
+        <p>
+          Click a model to browse its NPGen samples — across small (≤30 heavy atoms) and large (31–60) molecules.
+        </p>
+      </div>
+      <div class="model-browser">
+        <div class="model-tabs" role="tablist" aria-label="Model selector">
+          <button class="model-tab" data-model="graphaf">GraphAF</button>
+          <button class="model-tab" data-model="jtvae">JT-VAE</button>
+          <button class="model-tab" data-model="hiervae">HierVAE</button>
+          <button class="model-tab" data-model="digress">DiGress</button>
+          <button class="model-tab model-tab-ours is-active" data-model="fragfm" aria-selected="true">FragFM <span class="ours-badge">ours</span></button>
+        </div>
+        <div class="model-pane-wrap">
+          <div class="model-pane is-active" data-model="fragfm">
+            <div class="sample-subheader">Up to 30 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_fragfm_small.png" alt="FragFM NPGen samples (small)" loading="lazy"/>
+            <div class="sample-subheader">31–60 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_fragfm_large.png" alt="FragFM NPGen samples (large)" loading="lazy"/>
+          </div>
+          <div class="model-pane" data-model="digress">
+            <div class="sample-subheader">Up to 30 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_digress_small.png" alt="DiGress NPGen samples (small)" loading="lazy"/>
+            <div class="sample-subheader">31–60 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_digress_large.png" alt="DiGress NPGen samples (large)" loading="lazy"/>
+          </div>
+          <div class="model-pane" data-model="graphaf">
+            <div class="sample-subheader">Up to 30 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_graphaf_small.png" alt="GraphAF NPGen samples (small)" loading="lazy"/>
+            <div class="sample-subheader">31–60 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_graphaf_large.png" alt="GraphAF NPGen samples (large)" loading="lazy"/>
+          </div>
+          <div class="model-pane" data-model="hiervae">
+            <div class="sample-subheader">Up to 30 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_hiervae_small.png" alt="HierVAE NPGen samples (small)" loading="lazy"/>
+            <div class="sample-subheader">31–60 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_hiervae_large.png" alt="HierVAE NPGen samples (large)" loading="lazy"/>
+          </div>
+          <div class="model-pane" data-model="jtvae">
+            <div class="sample-subheader">Up to 30 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_jtvae_small.png" alt="JT-VAE NPGen samples (small)" loading="lazy"/>
+            <div class="sample-subheader">31–60 heavy atoms</div>
+            <img src="static/images/paper/samples_npgen_jtvae_large.png" alt="JT-VAE NPGen samples (large)" loading="lazy"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub: Sample gallery across datasets -->
+    <div class="subsection">
+      <h3 class="subsection-title">Generated Sample Gallery</h3>
+      <div class="content has-text-justified">
+        <p>
+          Random valid molecules generated by FragFM on the standard drug-like benchmarks <b>MOSES</b> and <b>GuacaMol</b>.
+        </p>
+      </div>
+      <div class="sample-gallery">
+        <figure class="publication-figure">
+          <figcaption class="sample-header">MOSES</figcaption>
+          <img src="static/images/paper/samples_moses.png" alt="FragFM-generated molecules on MOSES (drug-like small molecules)" loading="lazy"/>
+        </figure>
+        <figure class="publication-figure">
+          <figcaption class="sample-header">GuacaMol</figcaption>
+          <img src="static/images/paper/samples_guacamol.png" alt="FragFM-generated molecules on GuacaMol" loading="lazy"/>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Benchmarks -->
+
+
+<!-- ============================================ -->
+<!-- CONDITIONAL GENERATION — Property + Synthesizability -->
+<!-- ============================================ -->
+<section id="sec-conditional" class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Conditional Generation</h2>
+
+    <!-- Sub: Property control -->
+    <div class="subsection">
+      <h3 class="subsection-title">Property-Controlled Generation</h3>
+      <div class="content has-text-justified">
+        <p>
+          FragFM exposes <b>two guidance knobs</b>: standard classifier guidance <i>λ<sub>X</sub></i> that pulls the flow trajectory toward a target property <i>c</i>, and <b>fragment-bag reweighting</b> <i>λ<sub>𝓑</sub></i> that biases the fragment bag <i>𝓑</i> itself — up-weighting fragments whose predicted property matches the target.
+        </p>
+      </div>
+
+      <figure class="publication-figure" style="max-width:660px; margin:1rem auto 0;">
+        <img src="static/images/paper/conditional_bag_overview.png" alt="Unconditional vs conditional fragment bag sampling" loading="lazy"/>
+        <figcaption><b>Fragment-bag guidance (<i>λ<sub>𝓑</sub></i>).</b> At inference, the fragment bag <i>𝓑</i> is reweighted by a fragment-level property predictor: fragments helpful for target <i>c</i> are amplified, others suppressed — yielding the conditional bag <i>𝓑<sup>c</sup></i>.</figcaption>
+      </figure>
+
+      <div class="content has-text-justified" style="margin-top:1.25rem;">
+        <p>
+          Both knobs drop out of a single Bayes decomposition of the property-conditioned in-bag transition kernel:
+        </p>
+      </div>
+
+      <div class="formula-callout">
+        <div class="formula-math">
+          $$ p(X_{t+\Delta t}\mid X_t,\mathcal{B}^{c},c)
+          \;=\;
+          \underbrace{\;p(X_{t+\Delta t}\mid X_t,\mathcal{B}^{c})\;}_{\color{#4f46e5}{\mathcal{B}^{c}\text{ steered by }\lambda_{\mathcal{B}}}}
+          \;\cdot\;
+          \underbrace{\;\frac{p(c\mid X_{t+\Delta t},X_t,\mathcal{B}^{c})}{p(c\mid X_t,\mathcal{B}^{c})}\;}_{\color{#4f46e5}{\text{steered by }\lambda_X}} $$
+        </div>
+        <div class="formula-legend">
+          <div><span class="lbl-accent">λ<sub>𝓑</sub></span> biases the bag <i>𝓑<sup>c</sup></i> toward fragments whose predicted property matches <i>c</i>.</div>
+          <div><span class="lbl-accent">λ<sub>X</sub></span> is the classifier-guidance strength on the in-bag transition kernel.</div>
+        </div>
+      </div>
+
+      <div class="content has-text-justified">
+        <p>
+          On the hard JAK2 docking-score task (top 0.08% of ZINC250k), bag guidance alone reaches the target while DiGress collapses in validity.
+        </p>
+      </div>
+      <div class="figure-row three-col figure-compact">
+        <figure class="publication-figure">
+          <img src="static/images/paper/qed_fcd.png" alt="QED MAE-FCD" loading="lazy"/>
+          <figcaption><b>QED.</b> MAE–FCD across target values.</figcaption>
+        </figure>
+        <figure class="publication-figure">
+          <img src="static/images/paper/zinc_jak2_kde.png" alt="JAK2 docking KDE" loading="lazy"/>
+          <figcaption><b>JAK2 KDE.</b> Only FragFM reaches −11.0&nbsp;kcal/mol.</figcaption>
+        </figure>
+        <figure class="publication-figure">
+          <img src="static/images/paper/zinc_jak2_bag_guidance.png" alt="Bag guidance effect" loading="lazy"/>
+          <figcaption><b>Bag guidance.</b> <i>λ<sub>𝓑</sub></i> shifts MAE–FCD curves; red = bag-only (<i>λ<sub>X</sub></i>=0).</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Sub: Synthesizability via fragment-bag swap -->
+    <div class="subsection">
+      <h3 class="subsection-title">Synthesizability via Fragment-Bag Swap</h3>
+      <div class="content has-text-justified">
+        <p>
+          <b>AIZynthFinder retrosynthesis</b> on 25k MOSES samples: FragFM reaches <b>77% solved</b>, close to the MOSES test set (80%). Swapping the fragment bag to <b>fragments drawn from solved (synthesizable) molecules</b> — no retraining — pushes it to <b>85%</b>, exceeding the dataset itself.
+        </p>
+      </div>
 
     <figure class="schematic-wrap schematic-wide">
       <svg viewBox="0 0 820 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="frag-bag-schematic-title">
@@ -635,9 +959,144 @@
         <figcaption><b>Baseline comparison.</b> FragFM has the lowest unsolved rate among learned generators.</figcaption>
       </figure>
     </div>
+    </div><!-- /.subsection synthesizability -->
   </div>
 </section>
-<!-- End synthesizability -->
+<!-- End Conditional Generation -->
+
+
+<!-- ============================================ -->
+<!-- SCALABILITY — Sampling efficiency -->
+<!-- ============================================ -->
+<section id="sec-scalability" class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Scalability</h2>
+    <div class="content has-text-justified">
+      <p>
+        Denoising at the fragment level — not over individual atoms — keeps validity above <b>95%</b> and FCD below <b>1.0</b> even under aggressive step reduction, with <b>~5× faster</b> wall-clock time than DiGress on NPGen.
+      </p>
+    </div>
+    <div class="figure-row step-time figure-compact">
+      <figure class="publication-figure figure-step">
+        <img src="static/images/paper/sample_step.png" alt="Sampling step ablation" loading="lazy"/>
+        <figcaption><b>Step ablation.</b> Atom-based baselines collapse as steps shrink; FragFM holds up.</figcaption>
+      </figure>
+      <figure class="publication-figure figure-time">
+        <img src="static/images/paper/sample_time.png" alt="Wall-clock sampling time" loading="lazy"/>
+        <figcaption><b>Wall-clock time.</b> MOSES and NPGen; (·) = sampling steps.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+<!-- End Scalability -->
+
+
+<!-- ============================================ -->
+<!-- ADDITIONAL RESULTS — ZINC250k, fragment rule, temperature -->
+<!-- ============================================ -->
+<section id="sec-additional" class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Additional Results</h2>
+
+    <div class="content has-text-justified" style="max-width:720px; margin:0 auto 1rem;">
+      <p>
+        Ablations over the fragmentation rule, sampling temperature, fragment-bag size, and how well FragFM recovers rare fragments.
+      </p>
+    </div>
+
+    <div class="model-browser benchmark-browser">
+      <div class="model-tabs" role="tablist" aria-label="Additional result selector">
+        <button class="model-tab is-active" data-model="fragrule" aria-selected="true">(a) Fragmentation rule</button>
+        <button class="model-tab" data-model="temperature">(b) Temperature scaling</button>
+        <button class="model-tab" data-model="bagsize">(c) Fragment-bag size</button>
+        <button class="model-tab" data-model="longtail">(d) Long-tail recovery</button>
+      </div>
+      <div class="model-pane-wrap">
+
+        <!-- Fragment rule pane -->
+        <div class="model-pane is-active" data-model="fragrule">
+          <div class="pane-table-label">(a) Robustness to fragmentation rule <span class="table-label-sub">— BRICS vs RECAP vs rBRICS, no retraining</span></div>
+          <div class="pane-intro">Swapping BRICS for <b>RECAP</b> or <b>rBRICS</b> — keeping all hyperparameters fixed — barely moves the quality metrics. The framework is not tied to a specific fragmentation scheme.</div>
+          <table class="result-table result-bench">
+            <thead>
+              <tr>
+                <th rowspan="2">Rule</th>
+                <th colspan="6">MOSES</th>
+                <th colspan="3">ZINC250k</th>
+              </tr>
+              <tr>
+                <th>Valid ↑</th><th>Unique ↑</th><th>Novel ↑</th><th>Filters ↑</th><th>FCD ↓</th><th>SNN ↑</th>
+                <th>Valid ↑</th><th>NSPDK ↓</th><th>FCD ↓</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-training"><td>Training set</td><td>100.0</td><td>100.0</td><td>–</td><td>100.0</td><td>0.48</td><td>0.59</td><td>100.0</td><td>0.0001</td><td>0.062</td></tr>
+              <tr><td>BRICS <span class="no-retrain">(default)</span></td><td>99.8</td><td>100.0</td><td>87.1</td><td>99.1</td><td>0.58</td><td>0.56</td><td>99.81</td><td>0.0002</td><td>0.630</td></tr>
+              <tr><td>RECAP</td><td>99.8</td><td>99.9</td><td>83.6</td><td>99.3</td><td>0.56</td><td>0.57</td><td>99.66</td><td>0.0003</td><td>0.580</td></tr>
+              <tr><td>rBRICS</td><td>99.8</td><td>100.0</td><td>88.5</td><td>98.7</td><td>0.58</td><td>0.56</td><td>99.79</td><td>0.0003</td><td>0.563</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Temperature pane -->
+        <div class="model-pane" data-model="temperature">
+          <div class="pane-table-label">(b) Temperature scaling on MOSES <span class="table-label-sub">— quality–novelty trade-off via 𝒯<sub>pred</sub> and 𝒯<sub>bag</sub></span></div>
+          <div class="pane-intro">Two knobs shift the quality–novelty frontier: <i>𝒯<sub>pred</sub></i> on the denoiser's softmax and <i>𝒯<sub>bag</sub></i> on fragment-bag sampling. Raising <i>𝒯<sub>bag</sub></i> pushes <b>Novel</b> and <b>Scaf</b> up at a small FCD cost.</div>
+          <table class="result-table result-bench">
+            <thead>
+              <tr>
+                <th><i>𝒯<sub>pred</sub></i></th><th><i>𝒯<sub>bag</sub></i></th>
+                <th>Valid ↑</th><th>Unique ↑</th><th>Novel ↑</th><th>Filters ↑</th><th>FCD ↓</th><th>SNN ↑</th><th>Scaf ↑</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1.0</td><td>1.0</td><td>99.8</td><td>100.0</td><td>87.1</td><td>99.1</td><td>0.58</td><td>0.56</td><td>10.9</td></tr>
+              <tr><td>1.0</td><td>1.5</td><td>99.2</td><td>100.0</td><td>94.2</td><td>98.3</td><td>0.90</td><td>0.52</td><td>13.5</td></tr>
+              <tr><td>1.5</td><td>1.0</td><td>99.7</td><td>100.0</td><td>88.6</td><td>98.8</td><td>0.88</td><td>0.54</td><td>11.0</td></tr>
+              <tr><td>1.5</td><td>1.5</td><td>99.2</td><td>100.0</td><td>94.5</td><td>98.3</td><td>0.91</td><td>0.51</td><td>13.1</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Bag size pane -->
+        <div class="model-pane" data-model="bagsize">
+          <div class="pane-table-label">(c) Effect of fragment-bag size on MOSES <span class="table-label-sub">— inference-time and training-time bag size ablations</span></div>
+          <div class="pane-intro">Performance is largely saturated above the default (<b>N = 384</b>, dashed line). Inference-time is more sensitive than training-time — a moderate bag suffices for training, while inference quality continues to improve with larger <i>N</i><sub>inference</sub>.</div>
+          <figure class="publication-figure" style="margin:0.5rem 0 1rem;">
+            <img src="static/images/paper/bag_size_inference.png" alt="Effect of inference-time fragment-bag size" loading="lazy"/>
+            <figcaption><b>(a) Inference-time bag size</b> (with <i>N</i><sub>train</sub> = 384). Validity / Filters / FCD vs <i>N</i><sub>inference</sub> on log-scale.</figcaption>
+          </figure>
+          <figure class="publication-figure" style="margin:0;">
+            <img src="static/images/paper/bag_size_train.png" alt="Effect of training-time fragment-bag size" loading="lazy"/>
+            <figcaption><b>(b) Training-time bag size</b> (with <i>N</i><sub>inference</sub> = 384). The black dashed line marks the default FragFM configuration.</figcaption>
+          </figure>
+        </div>
+
+        <!-- Long-tail pane -->
+        <div class="model-pane" data-model="longtail">
+          <div class="pane-table-label">(d) Long-tail fragment recovery <span class="table-label-sub">— 20 rarest fragments per dataset, training vs FragFM ratios</span></div>
+          <div class="pane-intro">For each dataset, the 20 rarest fragments (<i>k</i> = 1 is the rarest) are plotted. FragFM-generated ratios closely track the training-set ratios — even for fragments that appear only a handful of times in training.</div>
+          <div class="figure-row three-col figure-compact" style="margin-top:0.5rem;">
+            <figure class="publication-figure">
+              <img src="static/images/paper/long_tail_moses.png" alt="Long-tail fragment recovery on MOSES" loading="lazy"/>
+              <figcaption><b>(a) MOSES</b></figcaption>
+            </figure>
+            <figure class="publication-figure">
+              <img src="static/images/paper/long_tail_guacamol.png" alt="Long-tail fragment recovery on GuacaMol" loading="lazy"/>
+              <figcaption><b>(b) GuacaMol</b></figcaption>
+            </figure>
+            <figure class="publication-figure">
+              <img src="static/images/paper/long_tail_npgen.png" alt="Long-tail fragment recovery on NPGen" loading="lazy"/>
+              <figcaption><b>(c) NPGen</b></figcaption>
+            </figure>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Additional Results -->
 
 
   </main>

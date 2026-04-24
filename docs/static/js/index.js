@@ -36,6 +36,31 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Citation modal — open / close
+function openCiteModal() {
+    const modal = document.getElementById('cite-modal');
+    if (modal) {
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCiteModal() {
+    const modal = document.getElementById('cite-modal');
+    if (modal) {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+    }
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const modal = document.getElementById('cite-modal');
+        if (modal && !modal.hidden) closeCiteModal();
+    }
+});
+
 // Copy BibTeX to clipboard
 function copyBibTeX() {
     const bibtexElement = document.getElementById('bibtex-code');
@@ -46,7 +71,7 @@ function copyBibTeX() {
         navigator.clipboard.writeText(bibtexElement.textContent).then(function() {
             // Success feedback
             button.classList.add('copied');
-            copyText.textContent = 'Cop';
+            copyText.textContent = 'Copied!';
 
             setTimeout(function() {
                 button.classList.remove('copied');
@@ -63,7 +88,7 @@ function copyBibTeX() {
             document.body.removeChild(textArea);
 
             button.classList.add('copied');
-            copyText.textContent = 'Cop';
+            copyText.textContent = 'Copied!';
             setTimeout(function() {
                 button.classList.remove('copied');
                 copyText.textContent = 'Copy';
@@ -119,40 +144,92 @@ function setupVideoCarouselAutoplay() {
     });
 }
 
-// Section TOC nav — active state on scroll + smooth jump
+// Model browser — switch active tab + pane
+function setupModelBrowser() {
+    document.querySelectorAll('.model-browser').forEach(browser => {
+        const tabs = browser.querySelectorAll('.model-tab');
+        const panes = browser.querySelectorAll('.model-pane');
+        if (!tabs.length || !panes.length) return;
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.dataset.model;
+                tabs.forEach(t => {
+                    const active = t === tab;
+                    t.classList.toggle('is-active', active);
+                    t.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+                panes.forEach(p => {
+                    p.classList.toggle('is-active', p.dataset.model === target);
+                });
+            });
+        });
+    });
+}
+
+// Section TOC nav — active state on scroll + smooth jump (desktop sidebar + mobile drawer)
 function setupTocNav() {
-    const links = document.querySelectorAll('.toc-nav a[data-section]');
+    const links = document.querySelectorAll('.toc-nav a[data-section], .toc-drawer-list a[data-section]');
     if (!links.length) return;
 
-    const sectionToLink = new Map();
+    const sectionToLinks = new Map();
     links.forEach(link => {
         const sec = document.getElementById(link.dataset.section);
-        if (sec) sectionToLink.set(sec, link);
+        if (!sec) return;
+        if (!sectionToLinks.has(sec)) sectionToLinks.set(sec, []);
+        sectionToLinks.get(sec).push(link);
     });
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
-            const link = sectionToLink.get(entry.target);
-            if (!link) return;
+            const targets = sectionToLinks.get(entry.target);
+            if (!targets) return;
             links.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
+            targets.forEach(l => l.classList.add('active'));
         });
     }, {
         rootMargin: '-25% 0px -65% 0px',
         threshold: 0
     });
 
-    sectionToLink.forEach((_, sec) => observer.observe(sec));
+    sectionToLinks.forEach((_, sec) => observer.observe(sec));
 
     links.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const target = document.getElementById(link.dataset.section);
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Close mobile drawer if the click originated from it
+            if (link.closest('.toc-drawer-list')) closeTocDrawer();
         });
     });
 }
+
+// Mobile TOC drawer open/close
+function openTocDrawer() {
+    const drawer = document.getElementById('toc-drawer');
+    if (drawer) {
+        drawer.hidden = false;
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeTocDrawer() {
+    const drawer = document.getElementById('toc-drawer');
+    if (drawer) {
+        drawer.hidden = true;
+        document.body.style.overflow = '';
+    }
+}
+
+// Close drawer on Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const drawer = document.getElementById('toc-drawer');
+        if (drawer && !drawer.hidden) closeTocDrawer();
+    }
+});
 
 $(document).ready(function() {
     // Check for click events on the navbar burger icon
@@ -176,5 +253,8 @@ $(document).ready(function() {
 
     // Setup section TOC nav
     setupTocNav();
+
+    // Setup model browser tabs
+    setupModelBrowser();
 
 })
