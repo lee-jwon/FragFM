@@ -1246,27 +1246,52 @@ code {
   /* Prevent horizontal scroll on the page */
   html, body {
     overflow-x: hidden;
+    max-width: 100%;
+  }
+  #main-content, main {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
 
   /* Section padding tightens on narrow screens */
   .section {
-    padding: 2rem 0.75rem;
+    padding: 2rem 0.75rem !important;
   }
   .section.hero-figure {
-    padding: 0.5rem 0.75rem 0.75rem;
+    padding: 0.5rem 0.75rem 0.75rem !important;
+  }
+  .hero .hero-body {
+    padding: 2rem 0.75rem;
   }
 
   /* Containers lose huge side padding */
+  .container,
   .container.is-max-desktop {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* Neutralize Bulma's negative margin on columns to stop viewport overflow */
+  .columns {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+  }
+  .column {
+    padding: 0.5rem !important;
   }
 
   /* Section titles scale down */
   .title.is-3 {
-    font-size: 1.5rem;
-    padding-left: 0.85rem;
-    margin-bottom: 1.25rem;
+    font-size: 1.35rem !important;
+    padding-left: 0.7rem !important;
+    margin-bottom: 1.25rem !important;
+    line-height: 1.25;
   }
   .subsection-title {
     font-size: 1rem;
@@ -1278,44 +1303,66 @@ code {
     gap: 0.35rem;
   }
   .model-tab {
-    flex: 1 1 auto;
-    font-size: 0.76rem;
-    padding: 0.45rem 0.7rem;
+    flex: 0 1 auto;
+    font-size: 0.72rem;
+    padding: 0.4rem 0.6rem;
     white-space: nowrap;
   }
 
-  /* Tables inside model-browser panes scroll horizontally rather than break layout */
-  .model-browser.benchmark-browser .model-pane,
-  .result-table-wrap.bench-table {
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
+  /* Model-browser / pane-wrap must let inner tables scroll, not overflow */
+  .model-browser,
+  .model-browser.benchmark-browser {
+    max-width: 100% !important;
+  }
+  .model-pane-wrap {
+    overflow: hidden;
+    max-width: 100%;
+  }
+  .model-browser.benchmark-browser .model-pane {
+    padding: 0.8rem 0.5rem !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .result-table-wrap.bench-table,
+  .result-table-wrap {
+    max-width: 100% !important;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
   .result-table.result-bench {
-    font-size: 0.68rem;
-    min-width: 520px;
+    font-size: 0.66rem;
+    min-width: 480px;
   }
   .result-table.result-bench thead th,
   .result-table.result-bench tbody td {
-    padding: 0.3rem 0.4rem;
+    padding: 0.28rem 0.35rem;
+  }
+  /* Plain (non-bench) result tables: let them shrink */
+  .result-table:not(.result-bench) {
+    font-size: 0.72rem;
+    width: 100%;
   }
 
-  /* AE split stacks (figure above, table below) */
+  /* AE split / synth split stack vertically */
   .two-col.ae-split,
-  .two-col.synth-split {
+  .two-col.synth-split,
+  .two-col {
     grid-template-columns: 1fr !important;
     gap: 1rem;
+    max-width: 100% !important;
   }
 
   /* Formula callouts avoid overflowing */
   .formula-callout {
-    padding: 0.85rem 0.9rem;
+    padding: 0.85rem 0.7rem;
+    max-width: 100%;
   }
   .formula-math {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
+    max-width: 100%;
   }
   .formula-legend {
     font-size: 0.78rem;
@@ -1325,15 +1372,24 @@ code {
   .publication-figure,
   .publication-figure.figure-wide,
   .publication-figure.figure-compact,
+  .publication-figure.figure-tiny,
   .figure-row,
   .figure-row.figure-compact,
   .figure-row.two-col,
+  .figure-row.three-col,
+  .figure-row.step-time,
   .two-col,
   .schematic-wrap,
   .schematic-wrap.schematic-wide,
   .bibtex-wrap,
   .hero-figure .publication-figure {
     max-width: 100% !important;
+    width: 100%;
+  }
+  .publication-figure img,
+  .sample-gallery img {
+    max-width: 100%;
+    height: auto;
   }
   .publication-figure figcaption {
     font-size: 0.72rem;
@@ -1345,16 +1401,45 @@ code {
     font-size: 0.78rem;
     line-height: 1.35;
     white-space: normal;
+    word-break: break-word;
   }
   .table-label-sub {
     display: inline;
   }
 
+  /* Body paragraphs: allow word breaks so long tokens don't push width */
+  .content,
+  .content p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  /* Contributions block: smaller, stacking handled elsewhere */
+  .contrib-card,
+  .contrib-solve {
+    padding: 0.75rem 0.85rem;
+  }
+
+  /* Hide inline SVG that is wider than viewport gracefully */
+  .schematic-wrap svg {
+    max-width: 100%;
+    height: auto;
+  }
+
   /* Bibtex code block scrolls inside its box */
-  #bibtex-code {
+  #bibtex-code,
+  .bibtex-wrap pre {
     font-size: 0.68rem;
     padding: 0.75rem;
     overflow-x: auto;
+    max-width: 100%;
+    white-space: pre;
+  }
+
+  /* Cite modal fits viewport */
+  .cite-modal-panel {
+    max-width: calc(100vw - 1.5rem);
+    padding: 1rem 0.9rem 0.85rem;
   }
 
   /* TOC drawer uses more of the viewport */
